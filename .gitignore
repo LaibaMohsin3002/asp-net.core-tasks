@@ -1,0 +1,15 @@
+.vs/
+bin/
+obj/
+*.user
+
+# Build artifacts
+bin/
+obj/
+
+# Packages
+packages/
+
+# User-specific files
+*.user
+*.suo
