@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using my_books.Data.Models;
 
 namespace my_books.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -13,6 +14,8 @@ namespace my_books.Data
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book_Author> Book_Authors { get; set; }
         public DbSet<Log> Logs { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book_Author>()
@@ -29,6 +32,8 @@ namespace my_books.Data
                 .HasForeignKey(ba => ba.AuthorId);
 
             modelBuilder.Entity<Log>().HasKey(n => n.Id);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

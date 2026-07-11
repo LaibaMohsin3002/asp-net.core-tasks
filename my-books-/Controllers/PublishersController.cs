@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using my_books.ActionResults;
 using my_books.Data.Services;
 using my_books.Data.ViewModels;
+using my_books.Data.ViewModels.Authentication;
 using my_books.Exceptions;
 
 namespace my_books.Controllers
 {
+    [Authorize(Roles = UserRoles.Publisher)]
     [Route("api/[controller]")]
     [ApiController]
     public class PublishersController : ControllerBase
@@ -57,27 +60,17 @@ namespace my_books.Controllers
         }
 
         [HttpGet("{id}")]
-        public CustomActionResult GetPublisherById(int id)
+        public IActionResult GetPublisherById(int id)
         {
             var _response = _publishersService.GetPublisherById(id);
 
             if (_response != null)
             {
-                var _responseObj = new CustomActionResultVM()
-                {
-                    Publisher = _response
-                };
-
-                return new CustomActionResult(_responseObj);
+                return Ok(_response);
             }
             else
             {
-                var _responseObj = new CustomActionResultVM()
-                {
-                    Exception = new Exception("This is coming from publishers controller")
-                };
-
-                return new CustomActionResult(_responseObj);
+                return NotFound();
             }
         }
         //[HttpPost]
